@@ -199,19 +199,7 @@ if uploaded_file:
                     )
                 )
 
-            fig = go.Figure(data=shapes
-                go.Mesh3d(
-                    x=[0, w, w, 0, 0, w, w, 0],
-                    y=[0, 0, d, d, 0, 0, d, d],
-                    z=[0, 0, 0, 0, h, h, h, h],
-                    i=[0, 0, 0, 1, 1, 2, 2, 3, 4, 4, 5, 6],
-                    j=[1, 2, 3, 2, 5, 3, 6, 0, 5, 6, 6, 7],
-                    k=[2, 3, 0, 5, 6, 6, 7, 4, 6, 7, 4, 0],
-                    opacity=0.5,
-                    color='lightblue',
-                    name='Panel'
-                )
-            )
+            fig = go.Figure(data=shapes)
             fig.update_layout(
                 title=f"3D Visualization of Panel {panel_index} ({selected_panel['Type']})",
                 scene=dict(
