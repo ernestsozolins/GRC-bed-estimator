@@ -168,57 +168,67 @@ if uploaded_file:
             base_thickness = material_thickness
             total_depth = base_thickness + d
 
-            # Panel base (U-shape base panel only)
-            base_panel = go.Mesh3d(
+            # Updated full panel model with base and 4 reveal walls
+            front_plate = go.Mesh3d(
                 x=[0, w, w, 0, 0, w, w, 0],
-                y=[0, 0, base_thickness, base_thickness, 0, 0, base_thickness, base_thickness],
+                y=[0, 0, material_thickness, material_thickness, 0, 0, material_thickness, material_thickness],
                 z=[0, 0, 0, 0, h, h, h, h],
                 i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
                 opacity=0.6,
                 color='lightblue',
-                name='Base Panel'
+                name='Front Plate'
             )
 
-            reveal_sides = go.Mesh3d(
-                x=[0, 0, base_thickness, base_thickness, 0, 0, base_thickness, base_thickness,
-                   w, w, w - base_thickness, w - base_thickness, w, w, w - base_thickness, w - base_thickness],
-                y=[base_thickness, total_depth, total_depth, base_thickness, base_thickness, total_depth, total_depth, base_thickness,
-                   base_thickness, total_depth, total_depth, base_thickness, base_thickness, total_depth, total_depth, base_thickness],
-                z=[0, 0, 0, 0, h, h, h, h,
-                   0, 0, 0, 0, h, h, h, h],
-                i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7,
-                   8, 9,10, 8,10,11,12,13,14,12,14,15],
-                j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5,
-                   9,10,11,11, 8, 9,13,14,15,15,12,13],
-                k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7,
-                  10,11, 8, 9,10,11,14,15,12,13,14,15],
-                opacity=0.5,
-                color='orange',
-                name='Reveal Sides'
-            )
-
-            shapes = [base_panel, reveal_sides]
-            
-
-            # Reveal section (extension)
-            if d > 0:
-                shapes.append(
+            # Four reveal walls (left, right, top, bottom)
+            reveal_walls = []
+            for x0, x1, z0, z1 in [(0, material_thickness, 0, h),  # left
+                                   (w - material_thickness, w, 0, h),  # right
+                                   (0, w, 0, material_thickness),  # bottom
+                                   (0, w, h - material_thickness, h)]:  # top
+                reveal_walls.append(
                     go.Mesh3d(
-                        x=[0, w, w, 0, 0, w, w, 0],
-                        y=[base_thickness, base_thickness, total_depth, total_depth, base_thickness, base_thickness, total_depth, total_depth],
-                        z=[0, 0, 0, 0, h, h, h, h],
+                        x=[x0, x1, x1, x0, x0, x1, x1, x0],
+                        y=[material_thickness, material_thickness, material_thickness + d, material_thickness + d]*2,
+                        z=[z0, z0, z0, z0, z1, z1, z1, z1],
                         i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
                         j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                         k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
-                        opacity=0.4,
+                        opacity=0.5,
                         color='orange',
-                        name='Reveal Section'
+                        name='Reveal Wall'
                     )
                 )
 
+            shapes = [front_plate] + reveal_walls
+            
+
+                            )
+
             fig = go.Figure(data=shapes)
+            # Annotate panel dimensions
+            fig.add_trace(go.Scatter3d(
+                x=[w / 2], y=[-material_thickness * 2], z=[0],
+                mode="text",
+                text=[f"Width: {w} mm"],
+                textposition="bottom center",
+                showlegend=False
+            ))
+            fig.add_trace(go.Scatter3d(
+                x=[-material_thickness * 2], y=[material_thickness / 2], z=[h / 2],
+                mode="text",
+                text=[f"Height: {h} mm"],
+                textposition="middle right",
+                showlegend=False
+            ))
+            fig.add_trace(go.Scatter3d(
+                x=[w + material_thickness], y=[material_thickness + d / 2], z=[h + material_thickness],
+                mode="text",
+                text=[f"Depth: {d} mm"],
+                textposition="top center",
+                showlegend=False
+            ))
             fig.update_layout(
                 title=f"3D Visualization of Panel {panel_index} ({selected_panel['Type']})",
                 scene=dict(
