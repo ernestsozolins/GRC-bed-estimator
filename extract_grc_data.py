@@ -159,11 +159,47 @@ if uploaded_file:
             st.markdown(f"**Total Panel Count:** {total}")
 
         st.subheader("Visualize a Specific Panel in 3D")
+        material_thickness = st.number_input("Base Material Thickness (mm)", value=16)
+        
         panel_index = st.selectbox("Select Panel Index to Visualize", options=df.index.tolist(), format_func=lambda i: f"{i}: {df.iloc[i]['Type']}")
         selected_panel = df.loc[panel_index]
         try:
             h, w, d = float(selected_panel['Height']), float(selected_panel['Width']), float(selected_panel['Depth'])
-            fig = go.Figure(data=[
+            base_thickness = material_thickness
+            total_depth = base_thickness + d
+
+            # Panel base (U-shape base panel only)
+            shapes = [
+                go.Mesh3d(
+                    x=[0, w, w, 0, 0, w, w, 0],
+                    y=[0, 0, base_thickness, base_thickness, 0, 0, base_thickness, base_thickness],
+                    z=[0, 0, 0, 0, h, h, h, h],
+                    i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
+                    j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
+                    k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
+                    opacity=0.6,
+                    color='lightblue',
+                    name='Base Panel'
+                )
+            ]
+
+            # Reveal section (extension)
+            if d > 0:
+                shapes.append(
+                    go.Mesh3d(
+                        x=[0, w, w, 0, 0, w, w, 0],
+                        y=[base_thickness, base_thickness, total_depth, total_depth, base_thickness, base_thickness, total_depth, total_depth],
+                        z=[0, 0, 0, 0, h, h, h, h],
+                        i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
+                        j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
+                        k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
+                        opacity=0.4,
+                        color='orange',
+                        name='Reveal Section'
+                    )
+                )
+
+            fig = go.Figure(data=shapes
                 go.Mesh3d(
                     x=[0, w, w, 0, 0, w, w, 0],
                     y=[0, 0, d, d, 0, 0, d, d],
