@@ -202,14 +202,14 @@ if uploaded_file:
                 usage_data['Used Weight (kg)'] = usage_data['Weight']
 
                 fig, ax = plt.subplots()
-                ax.bar(range(len(beds)), usage_data['Length'])
+                ax.bar(range(len(usage_data)), usage_data['Length'])
                 ax.set_title("Used Bed Length per Bed")
                 ax.set_xlabel("Bed Index")
                 ax.set_ylabel("Length (mm)")
                 st.pyplot(fig)
 
                 fig, ax = plt.subplots()
-                ax.bar(range(len(beds)), usage_data['Height'])
+                ax.bar(range(len(usage_data)), usage_data['Height'])
                 ax.set_title("Used Bed Height per Bed")
                 ax.set_xlabel("Bed Index")
                 ax.set_ylabel("Height (mm)")
