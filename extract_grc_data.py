@@ -89,6 +89,14 @@ def extract_from_excel_or_csv(file):
         st.error(f"Failed to extract data using selected columns. Error: {e}")
         return pd.DataFrame()
 
+st.subheader("Set Packing Orientation per Panel Type")
+panel_types = df['Type'].unique()
+orientation_map = {}
+for pt in panel_types:
+    orientation = st.selectbox(f"Packing Orientation for {pt}", options=["Front Face", "Side"], index=0, key=f"orient_{pt}")
+    orientation_map[pt] = orientation
+
+
 def compute_beds_and_trucks(panels, bed_width=2400, bed_weight_limit=2500, truck_weight_limit=15000, truck_max_length=13620, bed_dead_space_length=0, bed_dead_space_height=0, panel_spacing=0, max_bed_height=9999):
     beds = []
     for panel in panels:
@@ -357,7 +365,7 @@ if uploaded_file:
         bed_dead_space_height = st.number_input("Dead Space in Bed Height Direction (mm)", value=0)
         panel_spacing = st.number_input("Optional Spacing Between Panels (mm)", value=0)
         max_bed_height = st.number_input("Maximum Bed Height (mm)", value=9999)
-        pack_orientation = st.selectbox("Pack Panels On",options=["Front Face", "Side"],index=0,help="Choose whether panels are packed on their front face or rotated on their side.")
+        
         density = 2100
 
         if st.button("Run Transport Analysis"):
@@ -370,7 +378,9 @@ if uploaded_file:
                             height = float(row['Height'])
                             width = float(row['Width'])
                             depth = float(row['Depth'])
-                            if pack_orientation == "Side":
+                            panel_type = row['Type']
+                            orientation = orientation_map.get(panel_type, "Front Face")
+                            if orientation == "Side":
                               height, depth = depth, height
                             weight = float(row['Weight']) if 'Weight' in row and pd.notna(row['Weight']) else ((2 * height * width + 2 * width * depth + 2 * height * depth) * panel_thickness / 1e9) * density
                             panel_rows.append({
