@@ -177,7 +177,7 @@ if uploaded_file:
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
                 opacity=1,
-                color='lightblue',
+                color='orange',
                 name='Front Plate'
             )
 
@@ -241,7 +241,7 @@ if uploaded_file:
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
                 opacity=1,
-                color='lightblue',
+                color='orange',
                 name='Rear Wall'
             )
 
@@ -253,7 +253,7 @@ if uploaded_file:
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
                 opacity=1,
-                color='lightgray',
+                color='orange',
                 name='Top Fill'
             )
 
@@ -265,7 +265,7 @@ if uploaded_file:
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
                 opacity=1,
-                color='lightgray',
+                color='orange',
                 name='Bottom Fill'
             )
 
@@ -277,7 +277,7 @@ if uploaded_file:
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
                 opacity=1,
-                color='lightgray',
+                color='orange',
                 name='Left Fill'
             )
 
@@ -289,7 +289,7 @@ if uploaded_file:
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
                 opacity=1,
-                color='lightgray',
+                color='orange',
                 name='Right Fill'
             )
 
@@ -301,7 +301,7 @@ if uploaded_file:
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
                 opacity=1,
-                color='lightgray',
+                color='orange',
                 name='Core Fill'
             )
 
