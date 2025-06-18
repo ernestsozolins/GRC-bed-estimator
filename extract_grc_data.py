@@ -149,18 +149,18 @@ if uploaded_file:
             total = df['Count'].sum()
             st.markdown(f"**Total Panel Count:** {total}")
 
-        csv = df.to_csv(index=False).encode('utf-8')
-        st.download_button("Download Extracted Data as CSV", data=csv, file_name='extracted_grc_panels.csv', mime='text/csv')
+            csv = df.to_csv(index=False).encode('utf-8')
+            st.download_button("Download Extracted Data as CSV", data=csv, file_name='extracted_grc_panels.csv', mime='text/csv')
 
-        bed_width = st.number_input("Bed Width (mm)", value=2400)
-        bed_weight_limit = st.number_input("Bed Weight Limit (kg)", value=2500)
-        truck_weight_limit = st.number_input("Truck Weight Limit (kg)", value=15000)
-        truck_max_length = st.number_input("Truck Max Length (mm)", value=13620)
-        panel_thickness = st.number_input("Panel Thickness (mm, if no weight provided)", value=30)
-        bed_dead_space_length = st.number_input("Dead Space in Bed Length Direction (mm)", value=0)
-        bed_dead_space_height = st.number_input("Dead Space in Bed Height Direction (mm)", value=0)
-        panel_spacing = st.number_input("Optional Spacing Between Panels (mm)", value=0)
-        density = 2100
+            bed_width = st.number_input("Bed Width (mm)", value=2400)
+            bed_weight_limit = st.number_input("Bed Weight Limit (kg)", value=2500)
+            truck_weight_limit = st.number_input("Truck Weight Limit (kg)", value=15000)
+            truck_max_length = st.number_input("Truck Max Length (mm)", value=13620)
+            panel_thickness = st.number_input("Panel Thickness (mm, if no weight provided)", value=30)
+            bed_dead_space_length = st.number_input("Dead Space in Bed Length Direction (mm)", value=0)
+            bed_dead_space_height = st.number_input("Dead Space in Bed Height Direction (mm)", value=0)
+            panel_spacing = st.number_input("Optional Spacing Between Panels (mm)", value=0)
+            density = 2100
 
         if panel_thickness <= 0:
             st.error("Panel thickness must be greater than zero.")
