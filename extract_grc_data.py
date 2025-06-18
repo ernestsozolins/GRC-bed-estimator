@@ -204,7 +204,7 @@ if uploaded_file:
             shapes = [front_plate] + reveal_walls
             
 
-                            )
+                            
 
             fig = go.Figure(data=shapes)
             # Annotate panel dimensions
