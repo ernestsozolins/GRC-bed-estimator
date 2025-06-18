@@ -195,18 +195,18 @@ if uploaded_file:
                 usage_data['Used Weight (kg)'] = usage_data['Weight']
 
                 fig, ax = plt.subplots()
-ax.bar(range(len(beds)), usage_data['Length'])
-ax.set_title("Used Bed Length per Bed")
-ax.set_xlabel("Bed Index")
-ax.set_ylabel("Length (mm)")
-st.pyplot(fig)
+                ax.bar(range(len(beds)), usage_data['Length'])
+                ax.set_title("Used Bed Length per Bed")
+                ax.set_xlabel("Bed Index")
+                ax.set_ylabel("Length (mm)")
+                st.pyplot(fig)
 
-fig, ax = plt.subplots()
-ax.bar(range(len(beds)), usage_data['Height'])
-ax.set_title("Used Bed Height per Bed")
-ax.set_xlabel("Bed Index")
-ax.set_ylabel("Height (mm)")
-st.pyplot(fig)
+                fig, ax = plt.subplots()
+                ax.bar(range(len(beds)), usage_data['Height'])
+                ax.set_title("Used Bed Height per Bed")
+                ax.set_xlabel("Bed Index")
+                ax.set_ylabel("Height (mm)")
+                st.pyplot(fig)
 
                 truck_weights = [sum(b['Weight'] for b in truck) for truck in trucks]
                 truck_lengths = [sum(b['Length'] for b in truck) for truck in trucks]
