@@ -369,7 +369,7 @@ if uploaded_file:
                             height = float(row['Height'])
                             width = float(row['Width'])
                             depth = float(row['Depth'])
-                            weight = float(row['Weight']) if 'Weight' in row and pd.notna(row['Weight']) else height * width * (panel_thickness / 1000) * (density / 1000)
+                            weight = float(row['Weight']) if 'Weight' in row and pd.notna(row['Weight']) else (height/1000) * (width/1000) * (panel_thickness / 1000) * (density)
                             panel_rows.append({
                                 'Type': row['Type'],
                                 'Height': height,
