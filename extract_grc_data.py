@@ -91,9 +91,7 @@ def extract_from_excel_or_csv(file):
 
 
 
-for pt in panel_types:
-    orientation = st.selectbox(f"Packing Orientation for {pt}", options=["Front Face", "Side"], index=0, key=f"orient_{pt}")
-    orientation_map[pt] = orientation
+
 
 
 def compute_beds_and_trucks(panels, bed_width=2400, bed_weight_limit=2500, truck_weight_limit=15000, truck_max_length=13620, bed_dead_space_length=0, bed_dead_space_height=0, panel_spacing=0, max_bed_height=9999):
@@ -170,9 +168,9 @@ if uploaded_file:
         st.subheader("Set Packing Orientation per Panel Type")
         panel_types = df['Type'].unique()
         orientation_map = {}
-    for pt in panel_types:
-        orientation = st.selectbox(f"Packing Orientation for {pt}", options=["Front Face", "Side"], index=0, key=f"orient_{pt}")
-        orientation_map[pt] = orientation
+        for pt in panel_types:
+            orientation = st.selectbox(f"Packing Orientation for {pt}", options=["Front Face", "Side"], index=0, key=f"orient_{pt}")
+            orientation_map[pt] = orientation
 
         st.subheader("Visualize a Specific Panel in 3D")
         material_thickness = st.number_input("Base Material Thickness (mm)", value=16)
