@@ -177,7 +177,7 @@ bed_weight_limit = st.number_input("Bed Weight Limit (kg)", value=2500)
 truck_weight_limit = st.number_input("Truck Weight Limit (kg)", value=15000)
 truck_max_length = st.number_input("Truck Max Length (mm)", value=13620)
 panel_thickness = st.number_input("Panel Thickness (mm, if no weight provided)", value=30)
-density = 2100  # kg/m3
+        density = 2100  # kg/m3
         st.subheader("Transport Packing Plan")
         try:
             panel_rows = []
