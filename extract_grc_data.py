@@ -293,7 +293,19 @@ if uploaded_file:
                 name='Right Fill'
             )
 
-            shapes = [front_plate, rear_plate, top_reveal, bottom_reveal, left_reveal, right_reveal,
+            fill_core = go.Mesh3d(
+                x=[0, w, w, 0, 0, w, w, 0],
+                y=[0] * 4 + [material_thickness] * 4,
+                z=[0, 0, h, h] * 2,
+                i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
+                j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
+                k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
+                opacity=0.4,
+                color='lightgray',
+                name='Core Fill'
+            )
+
+            shapes = [front_plate, rear_plate, top_reveal, bottom_reveal, left_reveal, right_reveal, fill_core,
                       fill_top, fill_bottom, fill_left, fill_right]
             
 
