@@ -174,22 +174,20 @@ if uploaded_file:
                 for _, row in df.iterrows():
                     count = int(row['Count']) if 'Count' in row and pd.notna(row['Count']) else 1
                     for _ in range(count):
-                        try:
-                        height = float(row['Height'])
-                        width = float(row['Width'])
-                        depth = float(row['Depth'])
-                        weight = float(row['Weight']) if 'Weight' in row and pd.notna(row['Weight']) else height * width * (panel_thickness / 1000) * (density / 1000)
-                        panel_rows.append({
-                            'Type': row['Type'],
-                            'Height': height,
-                            'Width': width,
-                            'Depth': depth,
-                            'Weight': weight
-                        })
-                    except Exception as ex:
-                        st.warning(f"Skipping row due to invalid data: {ex}")
-                            'Weight': float(row['Weight']) if 'Weight' in row and pd.notna(row['Weight']) else float(row['Height']) * float(row['Width']) * (panel_thickness / 1000) * (density / 1000)
-                        })
+    try:
+        height = float(row['Height'])
+        width = float(row['Width'])
+        depth = float(row['Depth'])
+        weight = float(row['Weight']) if 'Weight' in row and pd.notna(row['Weight']) else height * width * (panel_thickness / 1000) * (density / 1000)
+        panel_rows.append({
+            'Type': row['Type'],
+            'Height': height,
+            'Width': width,
+            'Depth': depth,
+            'Weight': weight
+        })
+    except Exception as ex:
+        st.warning(f"Skipping row due to invalid data: {ex}")
 
                 beds, trucks = compute_beds_and_trucks(panel_rows, bed_width, bed_weight_limit, truck_weight_limit, truck_max_length)
 
