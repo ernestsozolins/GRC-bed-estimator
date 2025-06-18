@@ -89,9 +89,16 @@ def extract_from_excel_or_csv(file):
         st.error(f"Failed to extract data using selected columns. Error: {e}")
         return pd.DataFrame()
 
-st.subheader("Set Packing Orientation per Panel Type")
-panel_types = df['Type'].unique()
-orientation_map = {}
+if not df.empty:
+    st.success("Data extracted successfully!")
+    
+    st.subheader("Set Packing Orientation per Panel Type")
+    panel_types = df['Type'].unique()
+    orientation_map = {}
+    for pt in panel_types:
+        orientation = st.selectbox(f"Packing Orientation for {pt}", options=["Front Face", "Side"], index=0, key=f"orient_{pt}")
+        orientation_map[pt] = orientation
+
 for pt in panel_types:
     orientation = st.selectbox(f"Packing Orientation for {pt}", options=["Front Face", "Side"], index=0, key=f"orient_{pt}")
     orientation_map[pt] = orientation
