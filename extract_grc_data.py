@@ -172,8 +172,8 @@ if uploaded_file:
             try:
                 panel_rows = []
                 for _, row in df.iterrows():
-                  count = int(row['Count']) if 'Count' in row and pd.notna(row['Count']) else 1
-                for _ in range(count):
+    count = int(row['Count']) if 'Count' in row and pd.notna(row['Count']) else 1
+    for _ in range(count):
                     try:
                         height = float(row['Height'])
                         width = float(row['Width'])
