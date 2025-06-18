@@ -357,6 +357,9 @@ if uploaded_file:
         bed_dead_space_height = st.number_input("Dead Space in Bed Height Direction (mm)", value=0)
         panel_spacing = st.number_input("Optional Spacing Between Panels (mm)", value=0)
         max_bed_height = st.number_input("Maximum Bed Height (mm)", value=9999)
+        pack_orientation = st.selectbox("Pack Panels On",options=["Front Face", "Side"],index=0,help="Choose whether panels are packed on their front face or rotated on their side.")
+)
+
         density = 2100
 
         if st.button("Run Transport Analysis"):
@@ -369,6 +372,8 @@ if uploaded_file:
                             height = float(row['Height'])
                             width = float(row['Width'])
                             depth = float(row['Depth'])
+                            if pack_orientation == "Side":
+                              height, depth = depth, height
                             weight = float(row['Weight']) if 'Weight' in row and pd.notna(row['Weight']) else ((2 * height * width + 2 * width * depth + 2 * height * depth) * panel_thickness / 1e9) * density
                             panel_rows.append({
                                 'Type': row['Type'],
