@@ -93,7 +93,7 @@ def compute_beds_and_trucks(panels, bed_width=2400, bed_weight_limit=2500, truck
     for panel in panels:
         placed = False
         for bed in beds:
-            used_depth = sum(p['Depth'] for p in bed)
+            used_depth = sum(p['Depth'] + panel_spacing for p in bed)
             total_weight = sum(p['Weight'] for p in bed)
             if used_depth + panel['Depth'] <= bed_width and total_weight + panel['Weight'] <= bed_weight_limit:
                 bed.append(panel)
@@ -104,8 +104,8 @@ def compute_beds_and_trucks(panels, bed_width=2400, bed_weight_limit=2500, truck
 
     bed_summaries = []
     for bed in beds:
-        bed_length = max(p['Width'] for p in bed)
-        bed_height = max(p['Height'] for p in bed)
+        bed_length = max(p['Width'] for p in bed) + bed_dead_space_length
+        bed_height = max(p['Height'] for p in bed) + bed_dead_space_height
         bed_weight = sum(p['Weight'] for p in bed)
         panel_types = [str(p['Type']).strip() for p in bed if pd.notna(p['Type']) and isinstance(p['Type'], str) and str(p['Type']).strip().lower() not in ("", "nan", "none")]
         bed_summaries.append({
@@ -157,6 +157,9 @@ if uploaded_file:
         truck_weight_limit = st.number_input("Truck Weight Limit (kg)", value=15000)
         truck_max_length = st.number_input("Truck Max Length (mm)", value=13620)
         panel_thickness = st.number_input("Panel Thickness (mm, if no weight provided)", value=30)
+        bed_dead_space_length = st.number_input("Dead Space in Bed Length Direction (mm)", value=0)
+        bed_dead_space_height = st.number_input("Dead Space in Bed Height Direction (mm)", value=0)
+        panel_spacing = st.number_input("Optional Spacing Between Panels (mm)", value=0)
         density = 2100
 
         if panel_thickness <= 0:
@@ -191,13 +194,19 @@ if uploaded_file:
                 usage_data['Used Width (mm)'] = usage_data['Width']
                 usage_data['Used Weight (kg)'] = usage_data['Weight']
 
-                for title, column, ylabel in [("Used Bed Width per Bed", 'Used Width (mm)', 'Width (mm)'), ("Used Bed Weight per Bed", 'Used Weight (kg)', 'Weight (kg)')]:
-                    fig, ax = plt.subplots()
-                    ax.bar(range(len(beds)), usage_data[column])
-                    ax.set_title(title)
-                    ax.set_xlabel("Bed Index")
-                    ax.set_ylabel(ylabel)
-                    st.pyplot(fig)
+                fig, ax = plt.subplots()
+ax.bar(range(len(beds)), usage_data['Length'])
+ax.set_title("Used Bed Length per Bed")
+ax.set_xlabel("Bed Index")
+ax.set_ylabel("Length (mm)")
+st.pyplot(fig)
+
+fig, ax = plt.subplots()
+ax.bar(range(len(beds)), usage_data['Height'])
+ax.set_title("Used Bed Height per Bed")
+ax.set_xlabel("Bed Index")
+ax.set_ylabel("Height (mm)")
+st.pyplot(fig)
 
                 truck_weights = [sum(b['Weight'] for b in truck) for truck in trucks]
                 truck_lengths = [sum(b['Length'] for b in truck) for truck in trucks]
