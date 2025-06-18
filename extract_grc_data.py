@@ -171,7 +171,7 @@ if uploaded_file:
         )
 
         # ---- BED & TRUCK PACKING ----
-st.subheader("Transport Configuration")
+        st.subheader("Transport Configuration")
 bed_width = st.number_input("Bed Width (mm)", value=2400)
 bed_weight_limit = st.number_input("Bed Weight Limit (kg)", value=2500)
 truck_weight_limit = st.number_input("Truck Weight Limit (kg)", value=15000)
