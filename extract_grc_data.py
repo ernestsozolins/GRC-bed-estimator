@@ -7,6 +7,39 @@ import io
 
 st.title("GRC Panel Specification Extractor")
 
+# 3D visualization of the first type of panel (if available)
+import plotly.graph_objects as go
+
+if 'df' in locals() and not df.empty:
+    first_panel = df.iloc[0]
+    try:
+        h, w, d = float(first_panel['Height']), float(first_panel['Width']), float(first_panel['Depth'])
+        fig = go.Figure(data=[
+            go.Mesh3d(
+                x=[0, w, w, 0, 0, w, w, 0],
+                y=[0, 0, d, d, 0, 0, d, d],
+                z=[0, 0, 0, 0, h, h, h, h],
+                i=[0, 0, 0, 1, 1, 2, 2, 3, 4, 4, 5, 6],
+                j=[1, 2, 3, 2, 5, 3, 6, 0, 5, 6, 6, 7],
+                k=[2, 3, 0, 5, 6, 6, 7, 4, 6, 7, 4, 0],
+                opacity=0.5,
+                color='lightblue',
+                name='Panel'
+            )
+        ])
+        fig.update_layout(
+            title="3D Visualization of First Panel",
+            scene=dict(
+                xaxis_title='Width (mm)',
+                yaxis_title='Depth (mm)',
+                zaxis_title='Height (mm)'
+            ),
+            margin=dict(l=0, r=0, b=0, t=30)
+        )
+        st.plotly_chart(fig)
+    except Exception as e:
+        st.warning(f"Could not generate 3D panel view: {e}")
+
 uploaded_file = st.file_uploader("Upload a PDF, Excel, or CSV file", type=["pdf", "xlsx", "xls", "csv"])
 
 def extract_from_pdf(file):
