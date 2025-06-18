@@ -169,18 +169,37 @@ if uploaded_file:
             total_depth = base_thickness + d
 
             # Panel base (U-shape base panel only)
-            shapes = [
-                go.Mesh3d(
-                    x=[0, w, w, 0, 0, w, w, 0],
-                    y=[0, 0, base_thickness, base_thickness, 0, 0, base_thickness, base_thickness],
-                    z=[0, 0, 0, 0, h, h, h, h],
-                    i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
-                    j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
-                    k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
-                    opacity=0.6,
-                    color='lightblue',
-                    name='Base Panel'
-                )
+            base_panel = go.Mesh3d(
+                x=[0, w, w, 0, 0, w, w, 0],
+                y=[0, 0, base_thickness, base_thickness, 0, 0, base_thickness, base_thickness],
+                z=[0, 0, 0, 0, h, h, h, h],
+                i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
+                j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
+                k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
+                opacity=0.6,
+                color='lightblue',
+                name='Base Panel'
+            )
+
+            reveal_sides = go.Mesh3d(
+                x=[0, 0, base_thickness, base_thickness, 0, 0, base_thickness, base_thickness,
+                   w, w, w - base_thickness, w - base_thickness, w, w, w - base_thickness, w - base_thickness],
+                y=[base_thickness, total_depth, total_depth, base_thickness, base_thickness, total_depth, total_depth, base_thickness,
+                   base_thickness, total_depth, total_depth, base_thickness, base_thickness, total_depth, total_depth, base_thickness],
+                z=[0, 0, 0, 0, h, h, h, h,
+                   0, 0, 0, 0, h, h, h, h],
+                i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7,
+                   8, 9,10, 8,10,11,12,13,14,12,14,15],
+                j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5,
+                   9,10,11,11, 8, 9,13,14,15,15,12,13],
+                k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7,
+                  10,11, 8, 9,10,11,14,15,12,13,14,15],
+                opacity=0.5,
+                color='orange',
+                name='Reveal Sides'
+            )
+
+            shapes = [base_panel, reveal_sides]
             ]
 
             # Reveal section (extension)
