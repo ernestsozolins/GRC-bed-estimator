@@ -142,6 +142,12 @@ if uploaded_file:
     if not df.empty:
         st.success("Data extracted successfully!")
 
+        st.subheader("Row Removal and Update Option")
+        delete_rows = st.multiselect("Select row indices to delete from extracted data", df.index.tolist(), default=[])
+        if delete_rows:
+            df = df.drop(delete_rows).reset_index(drop=True)
+            st.info("Selected rows have been removed.")
+
         st.subheader("Extracted GRC Panel Data")
         st.dataframe(df)
 
