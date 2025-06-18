@@ -200,7 +200,7 @@ if uploaded_file:
             )
 
             shapes = [base_panel, reveal_sides]
-            ]
+            
 
             # Reveal section (extension)
             if d > 0:
