@@ -145,9 +145,9 @@ if uploaded_file:
         st.success("Data extracted successfully!")
 
         # Panel selection and 3D visualization
-            st.subheader("Visualize a Specific Panel in 3D")
-            panel_index = st.selectbox("Select Panel Index to Visualize", options=df.index.tolist(), format_func=lambda i: f"{i}: {df.iloc[i]['Type']}")
-            selected_panel = df.loc[panel_index]
+        st.subheader("Visualize a Specific Panel in 3D")
+        panel_index = st.selectbox("Select Panel Index to Visualize", options=df.index.tolist(), format_func=lambda i: f"{i}: {df.iloc[i]['Type']}")
+        selected_panel = df.loc[panel_index]
             try:
                 h, w, d = float(selected_panel['Height']), float(selected_panel['Width']), float(selected_panel['Depth'])
                 fig = go.Figure(data=[
