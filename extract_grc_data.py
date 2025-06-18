@@ -168,7 +168,7 @@ if uploaded_file:
             base_thickness = material_thickness
             total_depth = base_thickness + d
 
-            # Updated full panel model with base and 4 reveal walls
+            # Rebuild full panel with front face and 4 reveal blocks
             front_plate = go.Mesh3d(
                 x=[0, w, w, 0, 0, w, w, 0],
                 y=[0, 0, material_thickness, material_thickness, 0, 0, material_thickness, material_thickness],
@@ -181,27 +181,41 @@ if uploaded_file:
                 name='Front Plate'
             )
 
-            # Four reveal walls (left, right, top, bottom)
-            reveal_walls = []
-            for x0, x1, z0, z1 in [(0, material_thickness, 0, h),  # left
-                                   (w - material_thickness, w, 0, h),  # right
-                                   (0, w, 0, material_thickness),  # bottom
-                                   (0, w, h - material_thickness, h)]:  # top
-                reveal_walls.append(
-                    go.Mesh3d(
-                        x=[x0, x1, x1, x0, x0, x1, x1, x0],
-                        y=[material_thickness, material_thickness, material_thickness + d, material_thickness + d]*2,
-                        z=[z0, z0, z0, z0, z1, z1, z1, z1],
-                        i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
-                        j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
-                        k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
-                        opacity=0.5,
-                        color='orange',
-                        name='Reveal Wall'
-                    )
+            # Top and bottom reveals (along width)
+            def create_reveal(x0, x1, z0, z1, y_start):
+                return go.Mesh3d(
+                    x=[x0, x1, x1, x0, x0, x1, x1, x0],
+                    y=[y_start, y_start, y_start + d, y_start + d] * 2,
+                    z=[z0, z0, z0, z0, z1, z1, z1, z1],
+                    i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
+                    j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
+                    k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
+                    opacity=0.5,
+                    color='orange',
+                    name='Reveal Block'
                 )
 
-            shapes = [front_plate] + reveal_walls
+            top_reveal = create_reveal(0, w, h - material_thickness, h, material_thickness)
+            bottom_reveal = create_reveal(0, w, 0, material_thickness, material_thickness)
+
+            # Left and right reveals (along height)
+            def create_vertical_reveal(x_start):
+                return go.Mesh3d(
+                    x=[x_start, x_start + material_thickness] * 4,
+                    y=[material_thickness, material_thickness, material_thickness + d, material_thickness + d] * 2,
+                    z=[0, 0, 0, 0, h, h, h, h],
+                    i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
+                    j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
+                    k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
+                    opacity=0.5,
+                    color='orange',
+                    name='Reveal Block'
+                )
+
+            left_reveal = create_vertical_reveal(0)
+            right_reveal = create_vertical_reveal(w - material_thickness)
+
+            shapes = [front_plate, top_reveal, bottom_reveal, left_reveal, right_reveal]
             
 
                             
