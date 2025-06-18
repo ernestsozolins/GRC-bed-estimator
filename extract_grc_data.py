@@ -197,7 +197,7 @@ if uploaded_file:
                 st.markdown(f"**Total Beds:** {len(beds)}")
                 st.markdown(f"**Total Trucks:** {len(trucks)}")
 
-                usage_data = pd.DataFrame(beds)
+                usage_data = pd.DataFrame([b for b in beds if b['Height'] <= max_bed_height])
                 usage_data['Used Width (mm)'] = usage_data['Width']
                 usage_data['Used Weight (kg)'] = usage_data['Weight']
 
