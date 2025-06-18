@@ -163,14 +163,14 @@ if uploaded_file:
                     name='Panel'
                     )
                 ])
-                fig.update_layout(
-                title=f"3D Visualization of Panel {panel_index} ({selected_panel['Type']})",
-                scene=dict(
-                    xaxis_title='Width (mm)',
-                    yaxis_title='Depth (mm)',
-                    zaxis_title='Height (mm)'
-                    ),
-                margin=dict(l=0, r=0, b=0, t=30)
+            fig.update_layout(
+            title=f"3D Visualization of Panel {panel_index} ({selected_panel['Type']})",
+            scene=dict(
+                xaxis_title='Width (mm)',
+                yaxis_title='Depth (mm)',
+                zaxis_title='Height (mm)'
+                ),
+            margin=dict(l=0, r=0, b=0, t=30)
                 )
             st.plotly_chart(fig)
             except Exception as e:
