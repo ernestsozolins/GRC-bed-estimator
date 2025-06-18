@@ -176,7 +176,7 @@ if uploaded_file:
                 i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
-                opacity=0,
+                opacity=1,
                 color='lightblue',
                 name='Front Plate'
             )
@@ -189,7 +189,7 @@ if uploaded_file:
                 i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
-                opacity=0,
+                opacity=1,
                 color='orange',
                 name='Top Reveal'
             )
@@ -202,7 +202,7 @@ if uploaded_file:
                 i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
-                opacity=0,
+                opacity=1,
                 color='orange',
                 name='Bottom Reveal'
             )
@@ -215,7 +215,7 @@ if uploaded_file:
                 i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
-                opacity=0,
+                opacity=1,
                 color='orange',
                 name='Left Reveal'
             )
@@ -228,7 +228,7 @@ if uploaded_file:
                 i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
-                opacity=0,
+                opacity=1,
                 color='orange',
                 name='Right Reveal'
             )
@@ -240,7 +240,7 @@ if uploaded_file:
                 i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
-                opacity=0,
+                opacity=1,
                 color='lightblue',
                 name='Rear Wall'
             )
@@ -252,7 +252,7 @@ if uploaded_file:
                 i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
-                opacity=0,
+                opacity=1,
                 color='lightgray',
                 name='Top Fill'
             )
@@ -264,7 +264,7 @@ if uploaded_file:
                 i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
-                opacity=0,
+                opacity=1,
                 color='lightgray',
                 name='Bottom Fill'
             )
@@ -276,7 +276,7 @@ if uploaded_file:
                 i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
-                opacity=0.,
+                opacity=1,
                 color='lightgray',
                 name='Left Fill'
             )
@@ -288,7 +288,7 @@ if uploaded_file:
                 i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
-                opacity=0,
+                opacity=1,
                 color='lightgray',
                 name='Right Fill'
             )
@@ -300,7 +300,7 @@ if uploaded_file:
                 i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
                 j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
                 k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
-                opacity=0,
+                opacity=1,
                 color='lightgray',
                 name='Core Fill'
             )
