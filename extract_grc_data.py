@@ -183,6 +183,7 @@ if uploaded_file:
         with st.spinner("Running transport analysis..."):
             run_analysis = st.button("Run Transport Analysis")
         if run_analysis:
+            st.subheader("Transport Packing Plan")
         st.subheader("Transport Packing Plan")
 
         try:
