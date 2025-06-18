@@ -183,7 +183,31 @@ if uploaded_file:
         with st.spinner("Running transport analysis..."):
             run_analysis = st.button("Run Transport Analysis")
         if run_analysis:
-            st.subheader("Transport Packing Plan")
+        st.subheader("Transport Packing Plan")
+
+        try:
+            panel_rows = []
+            for _, row in df.iterrows():
+                count = int(row['Count']) if 'Count' in row and pd.notna(row['Count']) else 1
+                for _ in range(count):
+                    panel_rows.append({
+                        'Type': row['Type'],
+                        'Height': float(row['Height']),
+                        'Width': float(row['Width']),
+                        'Depth': float(row['Depth']),
+                        'Weight': float(row['Weight']) if 'Weight' in row and pd.notna(row['Weight']) else float(row['Height']) * float(row['Width']) * (panel_thickness / 1000) * (density / 1000)
+                    })
+
+            beds, trucks = compute_beds_and_trucks(panel_rows, bed_width, bed_weight_limit, truck_weight_limit, truck_max_length)
+
+            # Validation warnings
+            overfilled_beds = [i for i, bed in enumerate(beds) if bed['Width'] > bed_width or bed['Weight'] > bed_weight_limit]
+            if overfilled_beds:
+                st.warning(f"⚠️ Overfilled Beds: {overfilled_beds}")
+
+            overfilled_trucks = [i for i, truck in enumerate(trucks) if sum(b['Length'] for b in truck) > truck_max_length or sum(b['Weight'] for b in truck) > truck_weight_limit]
+            if overfilled_trucks:
+                st.warning(f"⚠️ Overfilled Trucks: {overfilled_trucks}")
 
         # Validation warnings
         overfilled_beds = [i for i, bed in enumerate(beds) if bed['Width'] > bed_width or bed['Weight'] > bed_weight_limit]
