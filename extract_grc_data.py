@@ -184,7 +184,6 @@ if uploaded_file:
             run_analysis = st.button("Run Transport Analysis")
         if run_analysis:
             st.subheader("Transport Packing Plan")
-        st.subheader("Transport Packing Plan")
 
         try:
             panel_rows = []
@@ -210,13 +209,6 @@ if uploaded_file:
             if overfilled_trucks:
                 st.warning(f"⚠️ Overfilled Trucks: {overfilled_trucks}")
 
-        # Validation warnings
-        overfilled_beds = [i for i, bed in enumerate(beds) if bed['Width'] > bed_width or bed['Weight'] > bed_weight_limit]
-        if overfilled_beds:
-            st.warning(f"⚠️ Overfilled Beds: {overfilled_beds}")
-
-        overfilled_trucks = [i for i, truck in enumerate(trucks) if sum(b['Length'] for b in truck) > truck_max_length or sum(b['Weight'] for b in truck) > truck_weight_limit]
-        if overfilled_trucks:
             st.warning(f"⚠️ Overfilled Trucks: {overfilled_trucks}")
         try:
             panel_rows = []
