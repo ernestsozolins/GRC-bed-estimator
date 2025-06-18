@@ -211,7 +211,7 @@ if uploaded_file:
                     color='lightblue',
                     name='Panel'
                 )
-            ])
+            )
             fig.update_layout(
                 title=f"3D Visualization of Panel {panel_index} ({selected_panel['Type']})",
                 scene=dict(
