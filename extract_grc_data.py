@@ -4,10 +4,9 @@ import pdfplumber
 import re
 import matplotlib.pyplot as plt
 import io
+import plotly.graph_objects as go
 
 st.title("GRC Panel Specification Extractor")
-
-
 
 uploaded_file = st.file_uploader("Upload a PDF, Excel, or CSV file", type=["pdf", "xlsx", "xls", "csv"])
 
@@ -90,14 +89,15 @@ def extract_from_excel_or_csv(file):
         st.error(f"Failed to extract data using selected columns. Error: {e}")
         return pd.DataFrame()
 
-def compute_beds_and_trucks(panels, bed_width=2400, bed_weight_limit=2500, truck_weight_limit=15000, truck_max_length=13620):
+def compute_beds_and_trucks(panels, bed_width=2400, bed_weight_limit=2500, truck_weight_limit=15000, truck_max_length=13620, bed_dead_space_length=0, bed_dead_space_height=0, panel_spacing=0, max_bed_height=9999):
     beds = []
     for panel in panels:
         placed = False
         for bed in beds:
             used_depth = sum(p['Depth'] + panel_spacing for p in bed)
             total_weight = sum(p['Weight'] for p in bed)
-            if used_depth + panel['Depth'] <= bed_width and total_weight + panel['Weight'] <= bed_weight_limit and max(p['Height'] for p in bed + [panel]) + bed_dead_space_height <= max_bed_height:
+            max_height = max(p['Height'] for p in bed + [panel]) + bed_dead_space_height
+            if used_depth + panel['Depth'] <= bed_width and total_weight + panel['Weight'] <= bed_weight_limit and max_height <= max_bed_height:
                 bed.append(panel)
                 placed = True
                 break
@@ -144,7 +144,20 @@ if uploaded_file:
     if not df.empty:
         st.success("Data extracted successfully!")
 
-        # Panel selection and 3D visualization
+        st.subheader("Row Removal and Update Option")
+        delete_rows = st.multiselect("Select row indices to delete from extracted data", df.index.tolist(), default=[])
+        if delete_rows:
+            df = df.drop(delete_rows).reset_index(drop=True)
+            st.info("Selected rows have been removed.")
+
+        st.subheader("Extracted GRC Panel Data")
+        st.dataframe(df)
+
+        if 'Count' in df.columns:
+            df['Count'] = pd.to_numeric(df['Count'], errors='coerce')
+            total = df['Count'].sum()
+            st.markdown(f"**Total Panel Count:** {total}")
+
         st.subheader("Visualize a Specific Panel in 3D")
         panel_index = st.selectbox("Select Panel Index to Visualize", options=df.index.tolist(), format_func=lambda i: f"{i}: {df.iloc[i]['Type']}")
         selected_panel = df.loc[panel_index]
@@ -161,84 +174,34 @@ if uploaded_file:
                     opacity=0.5,
                     color='lightblue',
                     name='Panel'
-                    )
-                ])
-            fig.update_layout(
-            title=f"3D Visualization of Panel {panel_index} ({selected_panel['Type']})",
-            scene=dict(
-                xaxis_title='Width (mm)',
-                yaxis_title='Depth (mm)',
-                zaxis_title='Height (mm)'
-                ),
-            margin=dict(l=0, r=0, b=0, t=30)
                 )
+            ])
+            fig.update_layout(
+                title=f"3D Visualization of Panel {panel_index} ({selected_panel['Type']})",
+                scene=dict(
+                    xaxis_title='Width (mm)',
+                    yaxis_title='Depth (mm)',
+                    zaxis_title='Height (mm)'
+                ),
+                margin=dict(l=0, r=0, b=0, t=30)
+            )
             st.plotly_chart(fig)
-            except Exception as e:
-                st.warning(f"Could not generate 3D panel view: {e}")
         except Exception as e:
             st.warning(f"Could not generate 3D panel view: {e}")
 
-        st.subheader("Row Removal and Update Option")
-        delete_rows = st.multiselect("Select row indices to delete from extracted data", df.index.tolist(), default=[])
-        if delete_rows:
-            df = df.drop(delete_rows).reset_index(drop=True)
-            st.info("Selected rows have been removed.")
+        st.subheader("Packing Configuration")
+        bed_width = st.number_input("Bed Width (mm)", value=2400)
+        bed_weight_limit = st.number_input("Bed Weight Limit (kg)", value=2500)
+        truck_weight_limit = st.number_input("Truck Weight Limit (kg)", value=15000)
+        truck_max_length = st.number_input("Truck Max Length (mm)", value=13620)
+        panel_thickness = st.number_input("Panel Thickness (mm, if no weight provided)", value=30)
+        bed_dead_space_length = st.number_input("Dead Space in Bed Length Direction (mm)", value=0)
+        bed_dead_space_height = st.number_input("Dead Space in Bed Height Direction (mm)", value=0)
+        panel_spacing = st.number_input("Optional Spacing Between Panels (mm)", value=0)
+        max_bed_height = st.number_input("Maximum Bed Height (mm)", value=9999)
+        density = 2100
 
-        st.subheader("Extracted GRC Panel Data")
-        st.dataframe(df)
-
-        if 'Count' in df.columns:
-            total = df['Count'].sum()
-            st.markdown(f"**Total Panel Count:** {total}")
-
-            # 3D visualization of the first type of panel (if available)
-            import plotly.graph_objects as go
-            first_panel = df.iloc[0]
-            try:
-                h, w, d = float(first_panel['Height']), float(first_panel['Width']), float(first_panel['Depth'])
-                fig = go.Figure(data=[
-                    go.Mesh3d(
-                        x=[0, w, w, 0, 0, w, w, 0],
-                        y=[0, 0, d, d, 0, 0, d, d],
-                        z=[0, 0, 0, 0, h, h, h, h],
-                        i=[0, 0, 0, 1, 1, 2, 2, 3, 4, 4, 5, 6],
-                        j=[1, 2, 3, 2, 5, 3, 6, 0, 5, 6, 6, 7],
-                        k=[2, 3, 0, 5, 6, 6, 7, 4, 6, 7, 4, 0],
-                        opacity=0.5,
-                        color='lightblue',
-                        name='Panel'
-                    )
-                ])
-                fig.update_layout(
-                    title="3D Visualization of First Panel",
-                    scene=dict(
-                        xaxis_title='Width (mm)',
-                        yaxis_title='Depth (mm)',
-                        zaxis_title='Height (mm)'
-                    ),
-                    margin=dict(l=0, r=0, b=0, t=30)
-                )
-                st.plotly_chart(fig)
-            except Exception as e:
-                st.warning(f"Could not generate 3D panel view: {e}")
-
-            csv = df.to_csv(index=False).encode('utf-8')
-            st.download_button("Download Extracted Data as CSV", data=csv, file_name='extracted_grc_panels.csv', mime='text/csv')
-
-            bed_width = st.number_input("Bed Width (mm)", value=2400)
-            bed_weight_limit = st.number_input("Bed Weight Limit (kg)", value=2500)
-            truck_weight_limit = st.number_input("Truck Weight Limit (kg)", value=15000)
-            truck_max_length = st.number_input("Truck Max Length (mm)", value=13620)
-            panel_thickness = st.number_input("Panel Thickness (mm, if no weight provided)", value=30)
-            bed_dead_space_length = st.number_input("Dead Space in Bed Length Direction (mm)", value=0)
-            bed_dead_space_height = st.number_input("Dead Space in Bed Height Direction (mm)", value=0)
-            panel_spacing = st.number_input("Optional Spacing Between Panels (mm)", value=0)
-            max_bed_height = st.number_input("Maximum Bed Height (mm)", value=9999)
-            density = 2100
-
-        if panel_thickness <= 0:
-            st.error("Panel thickness must be greater than zero.")
-        elif st.button("Run Transport Analysis"):
+        if st.button("Run Transport Analysis"):
             try:
                 panel_rows = []
                 for _, row in df.iterrows():
@@ -259,14 +222,12 @@ if uploaded_file:
                         except Exception as ex:
                             st.warning(f"Skipping row due to invalid data: {ex}")
 
-                beds, trucks = compute_beds_and_trucks(panel_rows, bed_width, bed_weight_limit, truck_weight_limit, truck_max_length)
+                beds, trucks = compute_beds_and_trucks(panel_rows, bed_width, bed_weight_limit, truck_weight_limit, truck_max_length, bed_dead_space_length, bed_dead_space_height, panel_spacing, max_bed_height)
 
                 st.markdown(f"**Total Beds:** {len(beds)}")
                 st.markdown(f"**Total Trucks:** {len(trucks)}")
 
                 usage_data = pd.DataFrame([b for b in beds if b['Height'] <= max_bed_height])
-                usage_data['Used Width (mm)'] = usage_data['Width']
-                usage_data['Used Weight (kg)'] = usage_data['Weight']
 
                 fig, ax = plt.subplots()
                 ax.bar(range(len(usage_data)), usage_data['Length'])
@@ -285,13 +246,19 @@ if uploaded_file:
                 truck_weights = [sum(b['Weight'] for b in truck) for truck in trucks]
                 truck_lengths = [sum(b['Length'] for b in truck) for truck in trucks]
 
-                for title, data, ylabel in [("Total Weight per Truck", truck_weights, 'Weight (kg)'), ("Used Length per Truck", truck_lengths, 'Length (mm)')]:
-                    fig, ax = plt.subplots()
-                    ax.bar(range(len(trucks)), data)
-                    ax.set_title(title)
-                    ax.set_xlabel("Truck Index")
-                    ax.set_ylabel(ylabel)
-                    st.pyplot(fig)
+                fig, ax = plt.subplots()
+                ax.bar(range(len(trucks)), truck_weights)
+                ax.set_title("Total Weight per Truck")
+                ax.set_xlabel("Truck Index")
+                ax.set_ylabel("Weight (kg)")
+                st.pyplot(fig)
+
+                fig, ax = plt.subplots()
+                ax.bar(range(len(trucks)), truck_lengths)
+                ax.set_title("Used Length per Truck")
+                ax.set_xlabel("Truck Index")
+                ax.set_ylabel("Length (mm)")
+                st.pyplot(fig)
 
                 for i, truck in enumerate(trucks):
                     st.markdown(f"### Truck {i+1} - Beds: {len(truck)}")
