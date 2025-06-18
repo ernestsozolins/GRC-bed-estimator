@@ -166,7 +166,7 @@ if uploaded_file:
             bed_dead_space_length = st.number_input("Dead Space in Bed Length Direction (mm)", value=0)
             bed_dead_space_height = st.number_input("Dead Space in Bed Height Direction (mm)", value=0)
             panel_spacing = st.number_input("Optional Spacing Between Panels (mm)", value=0)
-max_bed_height = st.number_input("Maximum Bed Height (mm)", value=9999)
+            max_bed_height = st.number_input("Maximum Bed Height (mm)", value=9999)
             density = 2100
 
         if panel_thickness <= 0:
