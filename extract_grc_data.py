@@ -358,8 +358,6 @@ if uploaded_file:
         panel_spacing = st.number_input("Optional Spacing Between Panels (mm)", value=0)
         max_bed_height = st.number_input("Maximum Bed Height (mm)", value=9999)
         pack_orientation = st.selectbox("Pack Panels On",options=["Front Face", "Side"],index=0,help="Choose whether panels are packed on their front face or rotated on their side.")
-)
-
         density = 2100
 
         if st.button("Run Transport Analysis"):
