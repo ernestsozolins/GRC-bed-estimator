@@ -369,7 +369,7 @@ if uploaded_file:
                             height = float(row['Height'])
                             width = float(row['Width'])
                             depth = float(row['Depth'])
-                            weight = float(row['Weight']) if 'Weight' in row and pd.notna(row['Weight']) else (height/1000) * (width/1000) * (panel_thickness / 1000) * (density)
+                            weight = float(row['Weight']) if 'Weight' in row and pd.notna(row['Weight']) else ((2 * height * width + 2 * width * depth + 2 * height * depth) * panel_thickness / 1e9) * density
                             panel_rows.append({
                                 'Type': row['Type'],
                                 'Height': height,
@@ -452,5 +452,18 @@ if uploaded_file:
                     st.download_button("Download Packing Plan as Excel", data=buffer.getvalue(), file_name="truck_packing_plan.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
                 st.success("Packing plan generated with separate sheets for trucks and a bed summary.")
+
+                st.subheader("Mass Summary by Panel Type")
+                panel_df = pd.DataFrame(panel_rows)
+                panel_summary = panel_df.groupby('Type').agg(
+                    Total_Quantity=('Type', 'count'),
+                    Total_Weight_kg=('Weight', 'sum'),
+                    Average_Weight_kg=('Weight', 'mean'),
+                    Height_mm=('Height', 'first'),
+                    Width_mm=('Width', 'first'),
+                    Depth_mm=('Depth', 'first')
+                ).reset_index()
+                st.dataframe(panel_summary)
+                st.download_button("Download Mass Summary as CSV", data=panel_summary.to_csv(index=False).encode('utf-8'), file_name='panel_mass_summary.csv', mime='text/csv')
             except Exception as e:
                 st.error(f"Error computing transport plan: {e}")
