@@ -148,31 +148,31 @@ if uploaded_file:
         st.subheader("Visualize a Specific Panel in 3D")
         panel_index = st.selectbox("Select Panel Index to Visualize", options=df.index.tolist(), format_func=lambda i: f"{i}: {df.iloc[i]['Type']}")
         selected_panel = df.loc[panel_index]
-            try:
-                h, w, d = float(selected_panel['Height']), float(selected_panel['Width']), float(selected_panel['Depth'])
-                fig = go.Figure(data=[
-                    go.Mesh3d(
-                        x=[0, w, w, 0, 0, w, w, 0],
-                        y=[0, 0, d, d, 0, 0, d, d],
-                        z=[0, 0, 0, 0, h, h, h, h],
-                        i=[0, 0, 0, 1, 1, 2, 2, 3, 4, 4, 5, 6],
-                        j=[1, 2, 3, 2, 5, 3, 6, 0, 5, 6, 6, 7],
-                        k=[2, 3, 0, 5, 6, 6, 7, 4, 6, 7, 4, 0],
-                        opacity=0.5,
-                        color='lightblue',
-                        name='Panel'
+        try:
+            h, w, d = float(selected_panel['Height']), float(selected_panel['Width']), float(selected_panel['Depth'])
+            fig = go.Figure(data=[
+                go.Mesh3d(
+                    x=[0, w, w, 0, 0, w, w, 0],
+                    y=[0, 0, d, d, 0, 0, d, d],
+                    z=[0, 0, 0, 0, h, h, h, h],
+                    i=[0, 0, 0, 1, 1, 2, 2, 3, 4, 4, 5, 6],
+                    j=[1, 2, 3, 2, 5, 3, 6, 0, 5, 6, 6, 7],
+                    k=[2, 3, 0, 5, 6, 6, 7, 4, 6, 7, 4, 0],
+                    opacity=0.5,
+                    color='lightblue',
+                    name='Panel'
                     )
                 ])
                 fig.update_layout(
-                    title=f"3D Visualization of Panel {panel_index} ({selected_panel['Type']})",
-                    scene=dict(
-                        xaxis_title='Width (mm)',
-                        yaxis_title='Depth (mm)',
-                        zaxis_title='Height (mm)'
+                title=f"3D Visualization of Panel {panel_index} ({selected_panel['Type']})",
+                scene=dict(
+                    xaxis_title='Width (mm)',
+                    yaxis_title='Depth (mm)',
+                    zaxis_title='Height (mm)'
                     ),
-                    margin=dict(l=0, r=0, b=0, t=30)
+                margin=dict(l=0, r=0, b=0, t=30)
                 )
-                st.plotly_chart(fig)
+            st.plotly_chart(fig)
             except Exception as e:
                 st.warning(f"Could not generate 3D panel view: {e}")
         except Exception as e:
