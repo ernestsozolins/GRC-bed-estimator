@@ -172,12 +172,13 @@ if uploaded_file:
 
         # ---- BED & TRUCK PACKING ----
         st.subheader("Transport Configuration")
-bed_width = st.number_input("Bed Width (mm)", value=2400)
-bed_weight_limit = st.number_input("Bed Weight Limit (kg)", value=2500)
-truck_weight_limit = st.number_input("Truck Weight Limit (kg)", value=15000)
-truck_max_length = st.number_input("Truck Max Length (mm)", value=13620)
-panel_thickness = st.number_input("Panel Thickness (mm, if no weight provided)", value=30)
+        bed_width = st.number_input("Bed Width (mm)", value=2400)
+        bed_weight_limit = st.number_input("Bed Weight Limit (kg)", value=2500)
+        truck_weight_limit = st.number_input("Truck Weight Limit (kg)", value=15000)
+        truck_max_length = st.number_input("Truck Max Length (mm)", value=13620)
+        panel_thickness = st.number_input("Panel Thickness (mm, if no weight provided)", value=30)
         density = 2100  # kg/m3
+
         st.subheader("Transport Packing Plan")
         try:
             panel_rows = []
@@ -191,17 +192,16 @@ panel_thickness = st.number_input("Panel Thickness (mm, if no weight provided)",
                         'Depth': float(row['Depth']),
                         'Weight': float(row['Weight']) if 'Weight' in row and pd.notna(row['Weight']) else float(row['Height']) * float(row['Width']) * (panel_thickness / 1000) * (density / 1000)
                     })
+
             beds, trucks = compute_beds_and_trucks(panel_rows, bed_width, bed_weight_limit, truck_weight_limit, truck_max_length)
             st.markdown(f"**Total Beds:** {len(beds)}")
             st.markdown(f"**Total Trucks:** {len(trucks)}")
 
-            # Truck visual table
             for i, truck in enumerate(trucks):
                 st.markdown(f"### Truck {i+1} - Beds: {len(truck)}")
                 truck_df = pd.DataFrame(truck)
                 st.dataframe(truck_df)
 
-            # Export truck packing plan
             export_data = []
             for i, truck in enumerate(trucks):
                 for j, bed in enumerate(truck):
@@ -215,14 +215,13 @@ panel_thickness = st.number_input("Panel Thickness (mm, if no weight provided)",
                         'Num Panels': bed['Num Panels'],
                         'Panel Types': ', '.join(bed['Panel Types'])
                     })
+
             export_df = pd.DataFrame(export_data)
             st.download_button(
-                label="Download Packing Plan as Excel",
+                label="Download Packing Plan as CSV",
                 data=export_df.to_csv(index=False).encode('utf-8'),
                 file_name='truck_packing_plan.csv',
                 mime='text/csv'
             )
         except Exception as e:
             st.error(f"Error computing transport plan: {e}")
-    else:
-        st.warning("No data extracted or incorrect file format.")
