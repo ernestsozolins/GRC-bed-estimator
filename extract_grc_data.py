@@ -95,7 +95,7 @@ def compute_beds_and_trucks(panels, bed_width=2400, bed_weight_limit=2500, truck
         for bed in beds:
             used_depth = sum(p['Depth'] + panel_spacing for p in bed)
             total_weight = sum(p['Weight'] for p in bed)
-            if used_depth + panel['Depth'] <= bed_width and total_weight + panel['Weight'] <= bed_weight_limit:
+            if used_depth + panel['Depth'] <= bed_width and total_weight + panel['Weight'] <= bed_weight_limit and max(p['Height'] for p in bed + [panel]) + bed_dead_space_height <= max_bed_height:
                 bed.append(panel)
                 placed = True
                 break
@@ -166,6 +166,7 @@ if uploaded_file:
             bed_dead_space_length = st.number_input("Dead Space in Bed Length Direction (mm)", value=0)
             bed_dead_space_height = st.number_input("Dead Space in Bed Height Direction (mm)", value=0)
             panel_spacing = st.number_input("Optional Spacing Between Panels (mm)", value=0)
+max_bed_height = st.number_input("Maximum Bed Height (mm)", value=9999)
             density = 2100
 
         if panel_thickness <= 0:
