@@ -168,7 +168,7 @@ if uploaded_file:
             base_thickness = material_thickness
             total_depth = base_thickness + d
 
-            # Rebuild full panel with front face and 4 reveal blocks
+            # Rebuild full panel with front face and solid side reveals
             front_plate = go.Mesh3d(
                 x=[0, w, w, 0, 0, w, w, 0],
                 y=[0, 0, material_thickness, material_thickness, 0, 0, material_thickness, material_thickness],
@@ -233,7 +233,68 @@ if uploaded_file:
                 name='Right Reveal'
             )
 
-            shapes = [front_plate, top_reveal, bottom_reveal, left_reveal, right_reveal]
+            rear_plate = go.Mesh3d(
+                x=[0, w, w, 0, 0, w, w, 0],
+                y=[material_thickness + d] * 4 + [material_thickness + d] * 4,
+                z=[0, 0, 0, 0, h, h, h, h],
+                i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
+                j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
+                k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
+                opacity=0.5,
+                color='lightblue',
+                name='Rear Wall'
+            )
+
+            fill_top = go.Mesh3d(
+                x=[0, w, w, 0, 0, w, w, 0],
+                y=[0, 0, material_thickness + d, material_thickness + d] * 2,
+                z=[h] * 4 + [h] * 4,
+                i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
+                j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
+                k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
+                opacity=0.3,
+                color='lightgray',
+                name='Top Fill'
+            )
+
+            fill_bottom = go.Mesh3d(
+                x=[0, w, w, 0, 0, w, w, 0],
+                y=[0, 0, material_thickness + d, material_thickness + d] * 2,
+                z=[0] * 4 + [0] * 4,
+                i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
+                j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
+                k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
+                opacity=0.3,
+                color='lightgray',
+                name='Bottom Fill'
+            )
+
+            fill_left = go.Mesh3d(
+                x=[0] * 4 + [0] * 4,
+                y=[0, 0, material_thickness + d, material_thickness + d] * 2,
+                z=[0, h, h, 0] * 2,
+                i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
+                j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
+                k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
+                opacity=0.3,
+                color='lightgray',
+                name='Left Fill'
+            )
+
+            fill_right = go.Mesh3d(
+                x=[w] * 4 + [w] * 4,
+                y=[0, 0, material_thickness + d, material_thickness + d] * 2,
+                z=[0, h, h, 0] * 2,
+                i=[0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7],
+                j=[1, 2, 3, 3, 0, 1, 5, 6, 7, 7, 4, 5],
+                k=[2, 3, 0, 1, 2, 3, 6, 7, 4, 5, 6, 7],
+                opacity=0.3,
+                color='lightgray',
+                name='Right Fill'
+            )
+
+            shapes = [front_plate, rear_plate, top_reveal, bottom_reveal, left_reveal, right_reveal,
+                      fill_top, fill_bottom, fill_left, fill_right]
             
 
                             
